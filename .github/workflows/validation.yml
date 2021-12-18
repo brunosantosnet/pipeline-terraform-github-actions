@@ -1,0 +1,47 @@
+name: Staging
+on:
+  pull_request:
+    branches:
+      - staging
+jobs:
+  Preparacao:
+    name: Análise de vulnerabilidades e custos
+    runs-on: ubuntu-latest
+    environment: STG
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/deployment/terraform
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: setup terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.0
+          terraform_wrapper: false
+      - name: aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: terraform init
+        run: terraform init
+      - name: terraform plan
+        run: terraform plan -var-file=environments/stg.tfvars -out=tfplan.json -no-color
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v1
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+      - name: Generate Infracost JSON
+        run: infracost breakdown --path tfplan.json --format json --out-file /tmp/infracost.json
+      - name: Post Infracost comment
+        uses: infracost/actions/comment@v1
+        with:
+          path: /tmp/infracost.json
+          behavior: update
+      - name: terraform security scan
+        uses: aquasecurity/tfsec-pr-commenter-action@main
+        with:
+          github_token: ${{ github.token }}
+          working_directory: ${{ github.workspace }}/deployment/terraform
