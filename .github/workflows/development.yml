@@ -1,9 +1,8 @@
-name: Apply Staging
+name: Development
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
-      - staging
+      - development
 jobs:
   Preparing:
     name: Preparing
@@ -25,10 +24,8 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: ${{ secrets.AWS_REGION }}
       - name: terraform init
         run: terraform init
       - name: terraform plan
         run: terraform plan -var-file=environments/lab.tfvars -out=tfplan.json -no-color
-      - name: terraform apply
-        run: terraform apply -auto-approve tfplan.json
