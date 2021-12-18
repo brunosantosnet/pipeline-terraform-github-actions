@@ -7,6 +7,7 @@ jobs:
   Preparing:
     name: Preparing
     runs-on: ubuntu-latest
+    environment: STG
     defaults:
       run:
         working-directory: ${{ github.workspace }}/deployment/terraform
