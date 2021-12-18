@@ -4,8 +4,8 @@ on:
     branches:
       - development
 jobs:
-  Preparing:
-    name: Preparing
+  Plano:
+    name: Plano do TF
     runs-on: ubuntu-latest
     environment: STG
     defaults:
