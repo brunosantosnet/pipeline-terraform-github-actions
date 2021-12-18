@@ -1,13 +1,11 @@
 name: Apply Staging
 on:
   push:
-  #pull_request:
-    #types: [closed]
     branches:
       - staging
 jobs:
-  Preparing:
-    name: Preparing
+  Deploy:
+    name: Deploy para staging
     runs-on: ubuntu-latest
     environment: STG
     defaults:

@@ -4,8 +4,8 @@ on:
     branches:
       - development
 jobs:
-  Validation:
-    name: Planejamento do Terraform
+  Plano:
+    name: Plano do TF
     runs-on: ubuntu-latest
     environment: STG
     defaults:

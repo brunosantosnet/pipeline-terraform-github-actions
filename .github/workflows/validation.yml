@@ -4,8 +4,8 @@ on:
     branches:
       - staging
 jobs:
-  Preparing:
-    name: Preparing
+  Preparacao:
+    name: Análise de vulnerabilidades e custos
     runs-on: ubuntu-latest
     environment: STG
     defaults:
