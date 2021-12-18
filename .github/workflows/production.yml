@@ -1,13 +1,13 @@
-name: Apply Staging
+name: Apply Production
 on:
   push:
     branches:
-      - staging
+      - main
 jobs:
   Deploy:
-    name: Deploy para staging
+    name: Deploy para produção
     runs-on: ubuntu-latest
-    environment: STG
+    environment: PRD
     defaults:
       run:
         working-directory: ${{ github.workspace }}/deployment/terraform
@@ -28,6 +28,6 @@ jobs:
       - name: terraform init
         run: terraform init
       - name: terraform plan
-        run: terraform plan -var-file=environments/stg.tfvars -out=tfplan.json -no-color
+        run: terraform plan -var-file=environments/prd.tfvars -out=tfplan.json -no-color
       - name: terraform apply
         run: terraform apply -auto-approve tfplan.json

@@ -28,4 +28,4 @@ jobs:
       - name: terraform init
         run: terraform init
       - name: terraform plan
-        run: terraform plan -var-file=environments/lab.tfvars -out=tfplan.json -no-color
+        run: terraform plan -var-file=environments/stg.tfvars -out=tfplan.json -no-color
