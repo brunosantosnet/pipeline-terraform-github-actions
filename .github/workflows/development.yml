@@ -4,8 +4,8 @@ on:
     branches:
       - development
 jobs:
-  Preparing:
-    name: Preparing
+  Validation:
+    name: Planejamento do Terraform
     runs-on: ubuntu-latest
     environment: STG
     defaults:
