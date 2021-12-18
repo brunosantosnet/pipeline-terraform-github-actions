@@ -27,6 +27,8 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: terraform init
         run: terraform init
+      - name: terraform workspace
+        run: terraform workspace select prd
       - name: terraform plan
         run: terraform plan -var-file=environments/prd.tfvars -out=tfplan.json -no-color
       - name: terraform apply
