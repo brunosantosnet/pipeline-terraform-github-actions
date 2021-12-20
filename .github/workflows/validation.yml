@@ -1,8 +1,6 @@
 name: Staging
 on:
-  pull_request:
-    branches:
-      - staging
+  workflow_dispatch
 jobs:
   Preparacao:
     name: Análise de vulnerabilidades e custos
@@ -14,6 +12,11 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+      - name: terraform security scan
+        uses: aquasecurity/tfsec-pr-commenter-action@main
+        with:
+          github_token: ${{ github.token }}
+          working_directory: ${{ github.workspace }}/deployment/terraform
       - name: setup terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -40,11 +43,6 @@ jobs:
       - name: terraform plan
         id: plan
         run: terraform plan -var-file=environments/stg.tfvars -out=tfplan.json -no-color
-      - name: terraform security scan
-        uses: aquasecurity/tfsec-pr-commenter-action@main
-        with:
-          github_token: ${{ github.token }}
-          working_directory: ${{ github.workspace }}/deployment/terraform
       - name: resume
         uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
