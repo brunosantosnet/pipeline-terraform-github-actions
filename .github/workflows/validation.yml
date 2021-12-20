@@ -77,6 +77,10 @@ jobs:
   tfsec:
     name: tfsec
     runs-on: ubuntu-latest
+    environment: STG
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/deployment/terraform
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -84,7 +88,7 @@ jobs:
         run: terraform init
       - name: Terraform security scan
         uses: triat/terraform-security-scan@v3.0.0
-        with:
-          tfsec_actions_working_dir: ${{ github.workspace }}/deployment/terraform
+        #with:
+          #tfsec_actions_working_dir: ${{ github.workspace }}/deployment/terraform
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
