@@ -39,7 +39,7 @@ jobs:
         with:
           github_token: ${{ github.token }}
           working_directory: ${{ github.workspace }}/deployment/terraform        
-          tfsec_version: 0.1.9
+          tfsec_version: 0.1.10
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
