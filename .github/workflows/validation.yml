@@ -1,8 +1,6 @@
 name: Staging
 on:
-  pull_request:
-    branches:
-      - staging
+  workflow_dispatch
 jobs:
   Preparacao:
     name: Análise de vulnerabilidades e custos
@@ -14,6 +12,11 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+      - name: terraform security scan
+        uses: aquasecurity/tfsec-pr-commenter-action@main
+        with:
+          github_token: ${{ github.token }}
+          working_directory: ${{ github.workspace }}/deployment/terraform
       - name: setup terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -37,6 +40,7 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+<<<<<<< HEAD
       - name: tfsec
         uses: reviewdog/action-tfsec@master
         with:
@@ -47,6 +51,8 @@ jobs:
           fail_on_error: true # Fail action if errors are found
           flags: -tee # Add debug flag to reviewdog
           tfsec_flags: "" #  Optional
+=======
+>>>>>>> 81cfeb5dbc9a852a81802849411766df73f28a74
       - name: terraform plan
         id: plan
         run: terraform plan -var-file=environments/stg.tfvars -out=tfplan.json -no-color

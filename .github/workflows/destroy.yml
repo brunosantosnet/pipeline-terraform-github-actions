@@ -1,0 +1,58 @@
+name: Destroy
+on:
+  workflow_dispatch
+jobs:
+  Staging:
+    name: Destroy Staging
+    runs-on: ubuntu-latest
+    environment: STG
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/deployment/terraform
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: setup terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.0
+          terraform_wrapper: false
+      - name: aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: terraform init
+        run: terraform init
+      - name: terraform workspace
+        run: terraform workspace select stg
+      - name: terraform destroy
+        run: terraform destroy -var-file=environments/stg.tfvars --auto-approve
+  Production:
+    name: Destroy Production
+    runs-on: ubuntu-latest
+    environment: PRD
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/deployment/terraform
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: setup terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.0
+          terraform_wrapper: false
+      - name: aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: terraform init
+        run: terraform init
+      - name: terraform workspace
+        run: terraform workspace select prd
+      - name: terraform destroy
+        run: terraform destroy -var-file=environments/prd.tfvars --auto-approve
