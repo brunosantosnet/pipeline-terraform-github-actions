@@ -37,9 +37,8 @@ jobs:
       - name: terraform security scan
         uses: aquasecurity/tfsec-pr-commenter-action@main
         with:
-          tfsec_actions_comment: true
-          working_directory: ${{ github.workspace }}/deployment/terraform
           github_token: ${{ github.token }}
+          working_directory: ${{ github.workspace }}/deployment/terraform        
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
