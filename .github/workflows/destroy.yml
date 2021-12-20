@@ -30,7 +30,7 @@ jobs:
       - name: terraform destroy
         run: terraform destroy -var-file=environments/stg.tfvars --auto-approve
   Production:
-    name: Destroy Staging
+    name: Destroy Production
     runs-on: ubuntu-latest
     environment: PRD
     defaults:
