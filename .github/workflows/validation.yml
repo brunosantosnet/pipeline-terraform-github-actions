@@ -1,6 +1,8 @@
 name: Staging
 on:
-  workflow_dispatch
+  push:
+    branches:
+      - staging
 jobs:
   Preparacao:
     name: Análise de vulnerabilidades e custos
@@ -40,7 +42,6 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-<<<<<<< HEAD
       - name: tfsec
         uses: reviewdog/action-tfsec@master
         with:
@@ -51,8 +52,6 @@ jobs:
           fail_on_error: true # Fail action if errors are found
           flags: -tee # Add debug flag to reviewdog
           tfsec_flags: "" #  Optional
-=======
->>>>>>> 81cfeb5dbc9a852a81802849411766df73f28a74
       - name: terraform plan
         id: plan
         run: terraform plan -var-file=environments/stg.tfvars -out=tfplan.json -no-color
