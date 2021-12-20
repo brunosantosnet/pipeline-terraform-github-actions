@@ -14,11 +14,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: terraform security scan
-        uses: aquasecurity/tfsec-pr-commenter-action@main
-        with:
-          github_token: ${{ github.token }}
-          #working_directory: ${{ github.workspace }}/deployment/terraform
       - name: setup terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -42,6 +37,11 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+      - name: terraform security scan
+        uses: aquasecurity/tfsec-pr-commenter-action@main
+        with:
+          github_token: ${{ github.token }}
+          #working_directory: ${{ github.workspace }}/deployment/terraform
       - name: terraform plan
         id: plan
         run: terraform plan -var-file=environments/stg.tfvars -out=tfplan.json -no-color
@@ -53,7 +53,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            const output = `#### Terraform Format and style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.validate.outputs.stdout }}\`
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
