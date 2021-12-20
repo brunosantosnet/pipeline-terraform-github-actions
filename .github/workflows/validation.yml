@@ -35,7 +35,7 @@ jobs:
       - name: terraform workspace
         run: terraform workspace select stg
       - name: terraform security scan
-        uses: aquasecurity/tfsec-pr-commenter-action@v0.1.9
+        uses: aquasecurity/tfsec-pr-commenter-action@v0.1.10
         with:
           github_token: ${{ github.token }}
           working_directory: ${{ github.workspace }}/deployment/terraform        
