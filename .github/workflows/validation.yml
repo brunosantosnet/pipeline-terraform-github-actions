@@ -14,10 +14,10 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      #- name: terraform security scan
-        #uses: aquasecurity/tfsec-pr-commenter-action@main
-        #with:
-          #github_token: ${{ github.token }}
+      - name: terraform security scan
+        uses: aquasecurity/tfsec-pr-commenter-action@main
+        with:
+          github_token: ${{ github.token }}
           #working_directory: ${{ github.workspace }}/deployment/terraform
       - name: setup terraform
         uses: hashicorp/setup-terraform@v1
@@ -74,40 +74,3 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
-  tfsec:
-    name: tfsec
-    runs-on: ubuntu-latest
-    environment: STG
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}/deployment/terraform
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: setup terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.0.11
-          terraform_wrapper: false
-      - name: aws credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-      - name: terraform init
-        run: terraform init
-      #- name: Terraform security scan
-        #uses: triat/terraform-security-scan@v3.0.0
-        #env:
-          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Run tfsec with reviewdog output on the PR
-        uses: reviewdog/action-tfsec@master
-        with:
-          github_token: ${{ secrets.github_token }}
-          level: info # Get more output from reviewdog
-          reporter: github-pr-review # Change reviewdog reporter
-          filter_mode: nofilter # Check all files, not just the diff
-          fail_on_error: true # Fail action if errors are found
-          flags: -tee # Add debug flag to reviewdog
-          tfsec_flags: "" # Optional
