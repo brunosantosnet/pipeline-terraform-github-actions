@@ -14,11 +14,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: terraform security scan
-        uses: aquasecurity/tfsec-pr-commenter-action@main
-        with:
-          github_token: ${{ github.token }}
-          working_directory: ${{ github.workspace }}/deployment/terraform
       - name: setup terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -39,6 +34,10 @@ jobs:
         run: terraform init
       - name: terraform workspace
         run: terraform workspace select stg
+      - name: terraform security scan
+        uses: aquasecurity/tfsec-pr-commenter-action@main
+        with:
+          github_token: ${{ github.token }}
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
