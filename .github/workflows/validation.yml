@@ -36,7 +36,6 @@ jobs:
         uses: reviewdog/action-tfsec@master
         with:
           github_token: ${{ secrets.github_token }}
-          working_directory: ${{ github.workspace }}/deployment/terraform
           level: info # Get more output from reviewdog
           reporter: github-pr-review # Change reviewdog reporter
           filter_mode: nofilter # Check all files, not just the diff
