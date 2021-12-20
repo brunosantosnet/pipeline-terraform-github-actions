@@ -22,7 +22,7 @@ jobs:
       - name: setup terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 1.1.0
+          terraform_version: 1.0.11
           terraform_wrapper: false
       - name: aws credentials
         uses: aws-actions/configure-aws-credentials@v1
